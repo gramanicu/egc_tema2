@@ -22,11 +22,14 @@
     <Filter Include="src">
       <UniqueIdentifier>{a73d11aa-9a42-4f7c-ba61-adefedb1e0cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Physics">
-      <UniqueIdentifier>{76351425-74c0-4f21-b06e-7c96dfa11f61}</UniqueIdentifier>
+    <Filter Include="src\Meshes">
+      <UniqueIdentifier>{42023606-d05d-45a8-8971-41336285a42d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Rendering">
-      <UniqueIdentifier>{d64749fb-66b9-4796-bdb8-41e579b53031}</UniqueIdentifier>
+    <Filter Include="src\Shaders">
+      <UniqueIdentifier>{e4923dce-045f-48d5-9baa-b10d7832c026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GameObjects">
+      <UniqueIdentifier>{7f0db1c8-fbb3-4f0a-adba-c5eb86fb0dc0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,17 +76,11 @@
     <ClCompile Include="..\Source\Component\SceneInput.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\src\Physics\Physics.cpp">
-      <Filter>src\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\src\Rendering\Objects.cpp">
-      <Filter>src\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\src\GameObject.cpp">
+    <ClCompile Include="..\Source\src\GameManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\src\Tema1.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Source\src\GameObjects\GameObject.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,25 +138,11 @@
     <ClInclude Include="..\Source\Component\SceneInput.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\src\Physics\Physics.hpp">
-      <Filter>src\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\src\Physics\Transform2D.hpp">
-      <Filter>src\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\src\Rendering\Objects.hpp">
-      <Filter>src\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\src\GameObject.hpp">
+    <ClInclude Include="..\Source\src\GameManager.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\src\Tema1.hpp">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Source\src\GameObjects\GameObject.hpp">
+      <Filter>src\GameObjects</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Source\src\Readme.md">
-      <Filter>src</Filter>
-    </None>
   </ItemGroup>
 </Project>

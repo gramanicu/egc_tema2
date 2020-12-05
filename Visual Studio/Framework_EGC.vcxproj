@@ -34,10 +34,8 @@
     <ClCompile Include="..\Source\Core\World.cpp" />
     <ClCompile Include="..\Source\include\gl.cpp" />
     <ClCompile Include="..\Source\Main.cpp" />
-    <ClCompile Include="..\Source\src\GameObject.cpp" />
-    <ClCompile Include="..\Source\src\Physics\Physics.cpp" />
-    <ClCompile Include="..\Source\src\Rendering\Objects.cpp" />
-    <ClCompile Include="..\Source\src\Tema1.cpp" />
+    <ClCompile Include="..\Source\src\GameManager.cpp" />
+    <ClCompile Include="..\Source\src\GameObjects\GameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Component\CameraInput.h" />
@@ -58,14 +56,8 @@
     <ClInclude Include="..\Source\include\glm.h" />
     <ClInclude Include="..\Source\include\math.h" />
     <ClInclude Include="..\Source\include\utils.h" />
-    <ClInclude Include="..\Source\src\GameObject.hpp" />
-    <ClInclude Include="..\Source\src\Physics\Physics.hpp" />
-    <ClInclude Include="..\Source\src\Physics\Transform2D.hpp" />
-    <ClInclude Include="..\Source\src\Rendering\Objects.hpp" />
-    <ClInclude Include="..\Source\src\Tema1.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Source\src\Readme.md" />
+    <ClInclude Include="..\Source\src\GameManager.hpp" />
+    <ClInclude Include="..\Source\src\GameObjects\GameObject.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FB43B467-42CC-458C-9556-597B025830F7}</ProjectGuid>
