@@ -9,7 +9,7 @@
 
 #include <Core/Engine.h>
 #include <Component/SimpleScene.h>
-#include "GameObjects/GameObject.hpp"
+#include "GameEngine/GameObject.hpp"
 
 namespace Skyroads {
 	namespace Constants {
@@ -23,11 +23,16 @@ namespace Skyroads {
 		~GameManager();
 		void Init() override;
 
-		void addGameObject(const std::string type, const GameObject& object);
+		void addGameObject(const std::string type, GameObject& object);
 		std::vector<GameObject>* getGameObjects(const std::string type);
 
 	private:
 		std::unordered_map<std::string, std::vector<GameObject>> gameObjects;
+
+		/// <summary>
+		/// Stores pointers to all gameObjects, in an ordered manner
+		/// </summary>
+		std::vector<GameObject*> gameObjectsArray;
 
 		void FrameStart() override;
 		void Update(float deltaTimeSeconds) override;

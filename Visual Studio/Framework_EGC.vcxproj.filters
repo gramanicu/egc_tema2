@@ -28,8 +28,8 @@
     <Filter Include="src\Shaders">
       <UniqueIdentifier>{e4923dce-045f-48d5-9baa-b10d7832c026}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\GameObjects">
-      <UniqueIdentifier>{7f0db1c8-fbb3-4f0a-adba-c5eb86fb0dc0}</UniqueIdentifier>
+    <Filter Include="src\GameEngine">
+      <UniqueIdentifier>{36d60bc7-dd4a-4e40-ae6f-fbe3cbebfdcb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,9 +79,13 @@
     <ClCompile Include="..\Source\src\GameManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\src\GameObjects\GameObject.cpp">
-      <Filter>src\GameObjects</Filter>
+    <ClCompile Include="..\Source\src\GameEngine\Colliders.cpp">
+      <Filter>src\GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\src\GameEngine\GameObject.cpp">
+      <Filter>src\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\src\GameEngine\Intersection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Core\World.h">
@@ -141,8 +145,14 @@
     <ClInclude Include="..\Source\src\GameManager.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\src\GameObjects\GameObject.hpp">
-      <Filter>src\GameObjects</Filter>
+    <ClInclude Include="..\Source\src\GameEngine\Colliders.hpp">
+      <Filter>src\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\src\GameEngine\GameObject.hpp">
+      <Filter>src\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\src\GameEngine\Intersection.hpp">
+      <Filter>src\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -22,9 +22,10 @@ void GameManager::Init()
 	}
 }
 
-void GameManager::addGameObject(const std::string type, const GameObject& object)
+void GameManager::addGameObject(const std::string type, GameObject& object)
 {
 	gameObjects[type].push_back(object);
+	gameObjectsArray.push_back(&object);
 }
 
 std::vector<GameObject>* GameManager::getGameObjects(const std::string type)
@@ -45,7 +46,20 @@ void GameManager::FrameStart()
 
 void GameManager::Update(float deltaTimeSeconds)
 {
-	
+	// For every gameObject types (type.first = type, type.second = array of all object of that types)
+	for (auto& type : gameObjects) {
+		auto& object = std::begin(type.second);
+		while (object != std::end(type.second)) {
+			// Update position
+
+
+			// Check collisions
+			object->ManageCollisions(gameObjectsArray);
+
+			// Render objects
+			object->Render(this); 
+		}
+	}
 }
 
 void GameManager::FrameEnd()
@@ -62,5 +76,4 @@ void GameManager::OnKeyPress(int key, int mods)
 
 void GameManager::OnKeyRelease(int key, int mods)
 {
-	
 }

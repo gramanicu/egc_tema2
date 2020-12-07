@@ -1,0 +1,80 @@
+#include "CollisionManager.hpp"
+
+std::vector<int> GameEngine::CollisionManager::getCollisions(const Collider& source, std::vector<Collider> others)
+{
+    return std::vector<int>();
+}
+
+GameEngine::CollisionManager::CollisionManager(){}
+
+bool GameEngine::CollisionManager::isCollision(const Collider& a, const Collider& b)
+{
+    return isCollision(a, b);
+}
+
+bool GameEngine::CollisionManager::isCollision(const BoxCollider& a, const BoxCollider& b)
+{
+    // AABB algorithm
+    glm::vec3 firstMin, firstMax, secondMin, secondMax;
+    glm::vec3 firstPos = a.getPosition();
+    glm::vec3 secondPos = b.getPosition();
+    glm::vec3 firstDim = a.getDimensions();
+    glm::vec3 secondDim = b.getDimensions();
+
+    // Compute the bounds
+    firstMin = firstPos - firstDim * 0.5f;
+    secondMin = secondPos - secondDim * 0.5f;
+    firstMax = firstPos + firstDim * 0.5f;
+    secondMax = firstPos + secondDim * 0.5f;
+
+    // Check for the collision
+    return ((firstMin.x <= secondMin.x && firstMax.x >= secondMax.x) &&
+        (firstMin.y <= secondMin.y && firstMax.y >= secondMax.y) &&
+        (firstMin.z <= secondMin.z && firstMax.z >= secondMax.z));
+}
+
+bool GameEngine::CollisionManager::isCollision(const SphereCollider& a, const SphereCollider& b)
+{
+    // Sphere detection algorithm
+    glm::vec3 firstPos = a.getPosition();
+    glm::vec3 secondPos = b.getPosition();
+    double firstRad = a.getRadius();
+    double secondRad = b.getRadius();
+
+    // Compute the distance between the two sphere centers
+    double distance = std::sqrt((firstPos.x - secondPos.x) * (firstPos.x - secondPos.x) +
+        (firstPos.y - secondPos.y) * (firstPos.y - secondPos.y) +
+        (firstPos.z - secondPos.z) * (firstPos.z - secondPos.z));
+
+    return distance < (firstRad + secondRad);
+}
+
+bool GameEngine::CollisionManager::isCollision(const BoxCollider& a, const SphereCollider& b)
+{
+    // Sphere - AABB collision detection algorithm
+    glm::vec3 boxPos = a.getPosition();
+    glm::vec3 boxDim = a.getDimensions();
+    glm::vec3 spherePosition = b.getPosition();
+
+    // Compute the box bounds
+    glm::vec3 min = boxPos - boxDim * 0.5f;
+    glm::vec3 max = boxPos + boxDim * 0.5f;
+
+    // Get the box closest point to the sphere
+    glm::vec3 point = glm::vec3(std::max(min.x, std::min(spherePosition.x, max.x)),
+        std::max(min.y, std::min(spherePosition.y, max.y)),
+        std::max(min.z, std::min(spherePosition.z, max.z)));
+
+
+    // Check if the point is inside the sphere
+    float distance = std::sqrt((point.x - spherePosition.x) * (point.x - spherePosition.x) +
+        (point.y - spherePosition.y) * (point.y - spherePosition.y) +
+        (point.z - spherePosition.z) * (point.z - spherePosition.z));
+
+    return distance < b.getRadius();
+}
+
+bool GameEngine::CollisionManager::isCollision(const SphereCollider& a, const BoxCollider& b)
+{
+    return CollisionManager::isCollision(b, a);
+}
