@@ -1,8 +1,6 @@
 #include "Colliders.hpp"
 
-GameEngine::Collider::~Collider() {}
-
-glm::vec3& GameEngine::Collider::getPosition() const
+glm::vec3 GameEngine::Collider::getPosition() const
 {
     return glm::vec3(position);
 }
@@ -19,7 +17,7 @@ GameEngine::BoxCollider::BoxCollider(const int id, const glm::vec3& pos, const g
     dimensions = dim;
 }
 
-glm::vec3& GameEngine::BoxCollider::getDimensions() const
+glm::vec3 GameEngine::BoxCollider::getDimensions() const
 {
     return glm::vec3(dimensions);
 }

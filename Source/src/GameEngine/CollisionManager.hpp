@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Colliders.hpp";
+#include "Colliders.hpp"
 
 namespace GameEngine {
 	class CollisionManager {

@@ -13,7 +13,7 @@ namespace GameEngine {
 
     public:
         //virtual ~Collider() = 0;            // Force this class to be an abstract one
-        glm::vec3& getPosition() const;
+        glm::vec3 getPosition() const;
         void setPosition(const glm::vec3& pos);
     };
 
@@ -37,7 +37,7 @@ namespace GameEngine {
 		/// Get the dimensions/scale of the collider
 		/// </summary>
 		/// <returns>The dimensions (width, height, length)</returns>
-		glm::vec3& getDimensions() const;
+		glm::vec3 getDimensions() const;
 
 		/// <summary>
 		/// Set the dimensions/scale of the collider

@@ -36,7 +36,7 @@
     <ClCompile Include="..\Source\Main.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\Colliders.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\GameObject.cpp" />
-    <ClCompile Include="..\Source\src\GameEngine\Intersection.cpp" />
+    <ClCompile Include="..\Source\src\GameEngine\CollisionManager.cpp" />
     <ClCompile Include="..\Source\src\GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +60,12 @@
     <ClInclude Include="..\Source\include\utils.h" />
     <ClInclude Include="..\Source\src\GameEngine\Colliders.hpp" />
     <ClInclude Include="..\Source\src\GameEngine\GameObject.hpp" />
-    <ClInclude Include="..\Source\src\GameEngine\Intersection.hpp" />
+    <ClInclude Include="..\Source\src\GameEngine\CollisionManager.hpp" />
     <ClInclude Include="..\Source\src\GameManager.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Source\src\Shaders\Base.FS.glsl" />
+    <None Include="..\Source\src\Shaders\Base.VS.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FB43B467-42CC-458C-9556-597B025830F7}</ProjectGuid>
