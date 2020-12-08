@@ -11,13 +11,9 @@ namespace GameEngine {
 		/// <param name="source">The collider of the object</param>
 		/// <param name="others">An vector with the colliders of all the other objects</param>
 		/// <returns>An array with the id's of all the objects this one collided with</returns>
-		static std::vector<int> getCollisions(const Collider& source, std::vector<Collider> others);
+		static std::vector<int> getCollisions(const Collider& source, std::vector<Collider*> others);
 	private:
 		CollisionManager();
 		static bool isCollision(const Collider& a, const Collider& b);
-		static bool isCollision(const BoxCollider& a, const BoxCollider& b);
-		static bool isCollision(const SphereCollider& a, const SphereCollider& b);
-		static bool isCollision(const BoxCollider& a, const SphereCollider& b);
-		static bool isCollision(const SphereCollider& a, const BoxCollider& b);
 	};
 }

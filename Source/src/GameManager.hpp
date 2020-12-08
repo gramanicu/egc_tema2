@@ -11,7 +11,7 @@
 
 namespace Skyroads {
 	namespace Constants {
-		const std::vector<std::string> objectTypes { "ball", "platform_red", "platform_green", "platform_yellow", "platform_orange", "platform_purple" };
+		const std::vector<std::string> objectTypes { "ball", "platform_red", "platform_green", "platform_yellow", "platform_orange", "platform_purple", "platform_blue" };
 		const std::vector<std::string> shaderNames { "Base" };
 		const std::vector<std::string> meshNames { "box", "sphere" };
 

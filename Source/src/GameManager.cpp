@@ -39,13 +39,13 @@ void GameManager::Init()
 	
 	// Initialize the player object
 	{
-		GameObject player("ball", glm::vec3(0, 0.5f, 0));
+		GameObject player("player", glm::vec3(0, 5.5f, 0));
 		addGameObject(player);
 	}
 
 	// Add the first platform under the player
 	{
-		GameObject platform4("platform_purple", glm::vec3(-3.f, -0.125, 0));
+		GameObject platform4("platform_blue", glm::vec3(-3.f, -0.125, 0));
 		addGameObject(platform4);
 		GameObject platform1("platform_red", glm::vec3(Constants::lanesX[0], -0.125, 0));
 		addGameObject(platform1);
@@ -61,7 +61,7 @@ void GameManager::Init()
 void GameManager::addGameObject(GameEngine::GameObject object)
 {
 	gameObjects[object.getType()].push_back(object);
-	gameObjectsArray.push_back(&object);
+	gameObjectsArray.push_back(&(gameObjects[object.getType()].back()));
 }
 
 std::vector<GameEngine::GameObject>* GameManager::getGameObjects(const std::string type)
@@ -105,7 +105,7 @@ void GameManager::Update(float deltaTimeSeconds)
 		auto& object = std::begin(type.second);
 		while (object != std::end(type.second)) {
 			// Update position
-
+			object->UpdatePhysics(deltaTimeSeconds);
 
 			// Check collisions
 			object->ManageCollisions(gameObjectsArray);

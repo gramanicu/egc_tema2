@@ -37,6 +37,7 @@
     <ClCompile Include="..\Source\src\GameEngine\Colliders.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\GameObject.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\CollisionManager.cpp" />
+    <ClCompile Include="..\Source\src\GameEngine\Physics.cpp" />
     <ClCompile Include="..\Source\src\GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +62,7 @@
     <ClInclude Include="..\Source\src\GameEngine\Colliders.hpp" />
     <ClInclude Include="..\Source\src\GameEngine\GameObject.hpp" />
     <ClInclude Include="..\Source\src\GameEngine\CollisionManager.hpp" />
+    <ClInclude Include="..\Source\src\GameEngine\Physics.hpp" />
     <ClInclude Include="..\Source\src\GameManager.hpp" />
   </ItemGroup>
   <ItemGroup>
