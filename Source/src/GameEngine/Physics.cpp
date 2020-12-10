@@ -8,11 +8,15 @@ double PhysixEngine::current_time = 0.f;
 
 glm::vec3 PhysixEngine::compute_acceleration(const State& state, double t)
 {	
+	// Drag = - drag_coef * V (this is simplified, as it would need to be divided
+	// by the object mass to result an acceleration)
+	glm::vec3 drag = glm::vec3(-state.v.x * state.drag_coef, 0, 0);
+
 	// Gravitational acceleration
 	glm::vec3 grav = glm::vec3(0.f, -PhysicsConstants::G_CONSTANT * state.gravity_coef, 0.f);
 	
 	// The object acceleration
-	return grav;
+	return grav + drag;
 }
 
 Derivative PhysixEngine::evaluate(const State& initial, double t, float dt, const Derivative& d)

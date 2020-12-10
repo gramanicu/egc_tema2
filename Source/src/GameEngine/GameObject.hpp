@@ -15,7 +15,6 @@ namespace GameEngine {
 		} lightingData;
 	}
 
-
 	namespace ObjectConstants {
 		/// <summary>
 		/// Where the top surface of the platform is placed
@@ -58,6 +57,11 @@ namespace GameEngine {
 		/// <returns>An array with the id's of all the objects this object is colliding with</returns>
 		std::vector<int> CollisionCheck(std::vector<GameObject*> gameObjects);
 	public:
+		/// <summary>
+		/// Variable used by the player game object
+		/// </summary>
+		bool isInJump;
+
 		static std::unordered_map<std::string, Mesh*>* meshes;
 		static std::unordered_map<std::string, Shader*>* shaders;
 
@@ -91,7 +95,7 @@ namespace GameEngine {
 		/// <param name="coll_check">All the objects to be checked (this object is automatically ignored)</param>
 		/// <param name="allObjects">All the objects in the scene (pointer to the map)</param>
 		/// <returns>A vector with the id's of all the objects this object is colliding with</returns>
-		void ManageCollisions(std::vector<GameObject*> collCheck, std::unordered_map<long int, GameEngine::GameObject>* allObjects);
+		std::vector<int> ManageCollisions(std::vector<GameObject*> collCheck, std::unordered_map<long int, GameEngine::GameObject>* allObjects);
 
 		/// <summary>
 		/// Set if this object will be rendered

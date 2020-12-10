@@ -6,11 +6,12 @@ long int GameEngine::GameObject::currentMaxID = 0;
 std::unordered_map<std::string, Mesh*>* GameEngine::GameObject::meshes = nullptr;
 std::unordered_map<std::string, Shader*>* GameEngine::GameObject::shaders = nullptr;
 
-GameEngine::GameObject::GameObject() : id(-1), type(""), _isRendered(true), position(glm::vec3(0)), mesh(nullptr), shader(nullptr), collider(nullptr) {};
+GameEngine::GameObject::GameObject() : id(-1), type(""), isInJump(false) , _isRendered(true), position(glm::vec3(0)), mesh(nullptr), shader(nullptr), collider(nullptr) {};
 
 GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& position) : type(type), position(position), mesh(nullptr), shader(nullptr), collider(nullptr) {
 	id = currentMaxID++;
 	_isRendered = true;
+	isInJump = false;
 
 	if (type == "player") {
 		scale = glm::vec3(ObjectConstants::playerHeight);
@@ -25,7 +26,7 @@ GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& pos
 		rigidbody.state.gravity_coef = .15f;
 	}
 	else if (type.rfind("platform_", 0) == 0) {
-		scale = glm::vec3(1, 0.25f, 20.f);
+		scale = glm::vec3(1, 0.25f, 250.f);
 		mesh = (*meshes)["box"];
 		shader = (*shaders)["Base"];
 		lightingInfo = { 0.1f, 0.99f, .001f };
@@ -79,6 +80,9 @@ void GameEngine::GameObject::UpdatePlatformData()
 	else if (color_string == "blue") {
 		color = glm::vec3(0, 0, 1);
 	}
+	else if (color_string == "white") {
+		color = glm::vec3(1);
+	}
 }
 
 GameEngine::GameObject::GameObject(const GameObject& other)
@@ -120,7 +124,7 @@ void GameEngine::GameObject::Render(GameEngine::Camera *camera, const glm::vec3&
 	glUniform3f(glGetUniformLocation(shader->program, "light_position"), lightLocation.x, lightLocation.y, lightLocation.z);
 
 	// Bind Material Data
-	glUniform1i(glGetUniformLocation(shader->program, "material_shininess"), (GLfloat)lightingInfo.materialShine);
+	glUniform1f(glGetUniformLocation(shader->program, "material_shininess"), (GLfloat)lightingInfo.materialShine);
 	glUniform1f(glGetUniformLocation(shader->program, "material_kd"), (GLfloat)lightingInfo.materialKd);
 	glUniform1f(glGetUniformLocation(shader->program, "material_ks"), (GLfloat)lightingInfo.materialKs);
 	glUniform3fv(glGetUniformLocation(shader->program, "object_color"), 1, glm::value_ptr(color));
@@ -128,9 +132,9 @@ void GameEngine::GameObject::Render(GameEngine::Camera *camera, const glm::vec3&
 	mesh->Render();
 }
 
-void GameEngine::GameObject::ManageCollisions(std::vector<GameObject*> collCheck, std::unordered_map<long int, GameEngine::GameObject>* allObjects) {
+std::vector<int> GameEngine::GameObject::ManageCollisions(std::vector<GameObject*> collCheck, std::unordered_map<long int, GameEngine::GameObject>* allObjects) {
 	// Only player collisions matter
-	if (type != "player") return;
+	if (type != "player") return std::vector<int>(0);
 
 	std::vector<GameObject*> platforms;
 	for (auto& obj : collCheck) {
@@ -148,14 +152,12 @@ void GameEngine::GameObject::ManageCollisions(std::vector<GameObject*> collCheck
 		if (collided.size() > 0) {
 			rigidbody.state.v.y = 0;
 			rigidbody.state.x.y = ObjectConstants::platformTopHeight + ObjectConstants::playerHeight / 2;
+			isInJump = false;
 		}
-
-		// Update the platform color
-		for each (int platID in collided)
-		{
-			(*allObjects)[platID].setType("platform_purple");
-		}
+		return collided;
 	}
+	
+	return std::vector<int>(0);
 }
 
 void GameEngine::GameObject::isRendered(const bool isRendered)
