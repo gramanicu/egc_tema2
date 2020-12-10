@@ -34,6 +34,7 @@
     <ClCompile Include="..\Source\Core\World.cpp" />
     <ClCompile Include="..\Source\include\gl.cpp" />
     <ClCompile Include="..\Source\Main.cpp" />
+    <ClCompile Include="..\Source\src\GameEngine\Camera.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\Colliders.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\GameObject.cpp" />
     <ClCompile Include="..\Source\src\GameEngine\CollisionManager.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="..\Source\include\glm.h" />
     <ClInclude Include="..\Source\include\math.h" />
     <ClInclude Include="..\Source\include\utils.h" />
+    <ClInclude Include="..\Source\src\GameEngine\Camera.hpp" />
     <ClInclude Include="..\Source\src\GameEngine\Colliders.hpp" />
     <ClInclude Include="..\Source\src\GameEngine\GameObject.hpp" />
     <ClInclude Include="..\Source\src\GameEngine\CollisionManager.hpp" />

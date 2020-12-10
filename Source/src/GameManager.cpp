@@ -16,11 +16,10 @@ GameManager::~GameManager()
 
 void GameManager::Init()
 {
-	// Initialise the data structure for the game objects
-	for each (auto& name in Constants::objectTypes)
-	{
-		gameObjects.emplace(name, std::vector<GameEngine::GameObject>());
-	}
+	camera = new GameEngine::Camera();
+	camera->Set(glm::vec3(0, 5.f, 30.f), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
+	camera->distanceToTarget = 3.5f;
+	camera->projectionMatrix = glm::perspective(RADIANS(cameraFOV), window->props.aspectRatio, 0.01f, 200.f);
 
 	// Load meshes
 	for each (auto & name in Constants::meshNames) {
@@ -39,7 +38,8 @@ void GameManager::Init()
 	
 	// Initialize the player object
 	{
-		GameObject player("player", glm::vec3(0, 5.5f, 0));
+		GameObject player("player", glm::vec3(0, 5.f, 25.f));
+		player.getRigidBody().state.drag_coef = 0;
 		addGameObject(player);
 	}
 
@@ -60,13 +60,12 @@ void GameManager::Init()
 
 void GameManager::addGameObject(GameEngine::GameObject object)
 {
-	gameObjects[object.getType()].push_back(object);
-	gameObjectsArray.push_back(&(gameObjects[object.getType()].back()));
+	gameObjects[object.getID()] = object;
 }
 
-std::vector<GameEngine::GameObject>* GameManager::getGameObjects(const std::string type)
+GameEngine::GameObject* GameManager::getGameObject(const long int id)
 {
-	return &(gameObjects[type]);
+	return &(gameObjects[id]);
 }
 
 void Skyroads::GameManager::LoadShader(std::string name)
@@ -98,22 +97,52 @@ void GameManager::FrameStart()
 	glViewport(0, 0, resolution.x, resolution.y);
 }
 
+void GameManager::UpdateCamera() {
+	// Update Camera
+	if (cameraMode) {
+		// 3rd Person
+		camera->Set(gameObjects[0].getRigidBody().state.x + glm::vec3(0.f, .5f, 3.5f), gameObjects[0].getRigidBody().state.x - glm::vec3(0, 1, 100), glm::vec3(0, 1, 0));
+		gameObjects[0].isRendered(true);
+		camera->RotateThirdPerson_OX(cameraRot.x);
+		camera->RotateThirdPerson_OY(cameraRot.y);
+	}
+	else {
+		// 1st Person
+		camera->Set(gameObjects[0].getRigidBody().state.x, gameObjects[0].getRigidBody().state.x - glm::vec3(0, 1, 100), glm::vec3(0, 1, 0));
+		gameObjects[0].isRendered(false);
+		camera->RotateFirstPerson_OX(cameraRot.x);
+		camera->RotateFirstPerson_OY(cameraRot.y);
+	}
+
+	camera->projectionMatrix = glm::perspective(RADIANS(cameraFOV), window->props.aspectRatio, 0.01f, 200.f);
+}
+
+
 void GameManager::Update(float deltaTimeSeconds)
 {
-	// For every gameObject types (type.first = type, type.second = array of all object of that types)
-	for (auto& type : gameObjects) {
-		auto& object = std::begin(type.second);
-		while (object != std::end(type.second)) {
-			// Update position
-			object->UpdatePhysics(deltaTimeSeconds);
+	std::vector<GameEngine::GameObject*> gameObjectsVector;
+	for (auto& object : gameObjects) {
+		gameObjectsVector.push_back(&(object.second));
+	}
 
-			// Check collisions
-			object->ManageCollisions(gameObjectsArray);
+	// Update Player
+	gameObjects[0].getRigidBody().state.x.z -= 0.05;
 
-			// Render objects
-			object->Render(GetSceneCamera(), Constants::lightPosition); 
-			object++;
-		}
+	// Update Light
+	glm::vec3 lightPosition = gameObjects[0].getRigidBody().state.x + lightPositionOffset;
+
+	UpdateCamera();
+
+	// For every gameObject types (type.first = id, type.second = the object)
+	for (auto& object : gameObjects) {
+		// Update position
+		object.second.UpdatePhysics(deltaTimeSeconds);
+
+		// Check collisions
+		object.second.ManageCollisions(gameObjectsVector, &gameObjects);
+
+		// Render objects
+		object.second.Render(camera, lightPosition);
 	};
 }
 
@@ -127,8 +156,38 @@ void GameManager::OnInputUpdate(float deltaTime, int mods)
 
 void GameManager::OnKeyPress(int key, int mods)
 {
+	switch (key) {
+	case GLFW_KEY_KP_ADD: {
+		cameraFOV += 5;
+	} break;
+	case GLFW_KEY_KP_SUBTRACT: {
+		cameraFOV -= 5;
+	} break;
+	case GLFW_KEY_C: {
+		cameraMode = !cameraMode;
+		cameraRot = glm::vec2(0);
+	} break;
+	}
 }
 
 void GameManager::OnKeyRelease(int key, int mods)
 {
+}
+
+void GameManager::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
+{
+	if (window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT))
+	{
+		float xLimit = 0.275;
+		float yLimit = 0.5;
+
+		float sensivityOX = 0.001f;
+		float sensivityOY = 0.001f;
+		cameraRot += glm::vec2(-sensivityOX * deltaY, -sensivityOY * deltaX);
+
+		if (cameraRot.x > xLimit) cameraRot.x = xLimit;
+		if (cameraRot.x < -xLimit) cameraRot.x = -xLimit;
+		if (cameraRot.y > yLimit) cameraRot.y = yLimit;
+		if (cameraRot.y < -yLimit) cameraRot.y = -yLimit;
+	}
 }

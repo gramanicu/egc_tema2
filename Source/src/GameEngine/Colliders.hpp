@@ -10,7 +10,7 @@ namespace GameEngine {
     /// </summary>
     class Collider {
     private:
-        int gameObjectID;
+        long int gameObjectID;
         ColliderType type;
         bool _affectsPhysics;
 
@@ -29,7 +29,7 @@ namespace GameEngine {
         /// <param name="id">The id of the gameObject</param>
         /// <param name="position">The position of the box collider</param>
         /// <param name="dimension">The dimensions of the collider</param>
-        Collider(const int id, const glm::vec3& position, const glm::vec3& dimensions);
+        Collider(const int long id, const glm::vec3& position, const glm::vec3& dimensions);
 
         /// <summary>
         /// Create a new sphere collider, with a specific radius, linked to a gameObject with a specific id
@@ -37,7 +37,7 @@ namespace GameEngine {
         /// <param name="id">The id of the gameObject</param>
         /// <param name="position">The position of the sphere collider</param>
         /// <param name="radius">The radius of the sphere</param>
-        Collider(const int id, const glm::vec3& position, const double radius);
+        Collider(const int long id, const glm::vec3& position, const double radius);
 
         /// <summary>
         /// Get the position of this collider
@@ -67,7 +67,7 @@ namespace GameEngine {
         /// Get the id of the collider (and subsequently, the game object it is attached to)
         /// </summary>
         /// <returns>The id</returns>
-        int getID() const;
+        long int getID() const;
 
         /// <summary>
         /// Get the type of the collider

@@ -20,7 +20,7 @@ void GameEngine::Collider::affectsPhysics(const bool aff)
     _affectsPhysics = aff;
 }
 
-int GameEngine::Collider::getID() const
+long int GameEngine::Collider::getID() const
 {
     return gameObjectID;
 }
@@ -40,7 +40,7 @@ GameEngine::Collider::Collider(const Collider& other)
     dimensions = other.dimensions;
 }
 
-GameEngine::Collider::Collider(const int id, const glm::vec3& pos, const glm::vec3& dim)
+GameEngine::Collider::Collider(const long int id, const glm::vec3& pos, const glm::vec3& dim)
 {
     gameObjectID = id;
     _affectsPhysics = false;
@@ -60,7 +60,7 @@ void GameEngine::Collider::setDimensions(const glm::vec3& dim)
     dimensions = dim;
 }
 
-GameEngine::Collider::Collider(const int id, const glm::vec3& pos, const double rad)
+GameEngine::Collider::Collider(const long int id, const glm::vec3& pos, const double rad)
 {
     gameObjectID = id;
     _affectsPhysics = false;

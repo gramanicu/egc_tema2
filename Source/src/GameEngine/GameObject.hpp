@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Core/Engine.h>
-#include <Component/SimpleScene.h>
 #include <Component/Transform/Transform.h>
 #include "Physics.hpp"
 #include "CollisionManager.hpp"
+#include "Camera.hpp"
 
 namespace GameEngine {
 	namespace Data {
@@ -15,12 +15,26 @@ namespace GameEngine {
 		} lightingData;
 	}
 
+
+	namespace ObjectConstants {
+		/// <summary>
+		/// Where the top surface of the platform is placed
+		/// </summary>
+		const float platformTopHeight = 0.f;
+
+		/// <summary>
+		/// The height (scale) of the player (ball)
+		/// </summary>
+		const float playerHeight = 1.f;
+	}
+
 	class GameObject
 	{
 	private:
-		static int currentMaxID;
+		static long int currentMaxID;
 
-		int id;
+		long int id;
+		bool _isRendered;
 		std::string type;
 
 		glm::vec3 position;
@@ -34,6 +48,11 @@ namespace GameEngine {
 		Data::lightingData lightingInfo;
 
 		/// <summary>
+		/// In case this object is a platform, it is possible that it's type will change (color). So, the color data and others things must be updated
+		/// </summary>
+		void UpdatePlatformData();
+
+		/// <summary>
 		/// Find all existing collisions between this object and the specified objects
 		/// <param name="gameObjects">All the objects to be checked (this object is automatically ignored)</param>
 		/// <returns>An array with the id's of all the objects this object is colliding with</returns>
@@ -43,7 +62,14 @@ namespace GameEngine {
 		static std::unordered_map<std::string, Shader*>* shaders;
 
 		/// <summary>
-		/// Constructor for a GameObject.
+		/// A simple constructor
+		/// </summary>
+		GameObject();
+
+		/// <summary>
+		/// Constructor for a GameObject. In the case of platforms, the Y component of the position
+		/// is ignored, and it will computed in such a way that the top of the platform is placed
+		/// at "ObjectConstants::platformTopHeight"
 		/// </summary>
 		/// <param name="type">The type of the object</param>
 		/// <param name="position">The position of the object</param>
@@ -57,19 +83,33 @@ namespace GameEngine {
 		/// </summary>
 		/// <param name="camera">The camera used in the scene</param>
 		/// <param name="lightLocation">The location of the light</param>
-		void Render(EngineComponents::Camera* camera, const glm::vec3& lightLocation);
+		void Render(GameEngine::Camera* camera, const glm::vec3& lightLocation);
 
 		/// <summary>
 		/// Manage the collisions between this object and all the other game objects
 		/// </summary>
-		/// <param name="gameObjects">All the gameobjects (as an array)</param>
-		void ManageCollisions(std::vector<GameObject*> gameObjects);
+		/// <param name="coll_check">All the objects to be checked (this object is automatically ignored)</param>
+		/// <param name="allObjects">All the objects in the scene (pointer to the map)</param>
+		/// <returns>A vector with the id's of all the objects this object is colliding with</returns>
+		void ManageCollisions(std::vector<GameObject*> collCheck, std::unordered_map<long int, GameEngine::GameObject>* allObjects);
+
+		/// <summary>
+		/// Set if this object will be rendered
+		/// </summary>
+		/// <param name="isRendered"></param>
+		void isRendered(const bool isRendered);
 
 		/// <summary>
 		/// Get the type of the game object
 		/// </summary>
 		/// <returns>The type</returns>
 		std::string getType() const;
+
+		/// <summary>
+		/// Get the id of the game object
+		/// </summary>
+		/// <returns>The id</returns>
+		long int getID() const;
 
 		/// <summary>
 		/// Set the type of the object

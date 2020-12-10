@@ -37,7 +37,7 @@ void SimpleScene::InitResources()
 	camera->transform->SetWorldRotation(glm::vec3(-15, 0, 0));
 	camera->Update();
 
-	cameraInput = new CameraInput(camera);
+	cameraInput = nullptr;
 	window = Engine::GetWindow();
 
 	SceneInput *SI = new SceneInput(this);
