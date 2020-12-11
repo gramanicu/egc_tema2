@@ -70,6 +70,8 @@
   <ItemGroup>
     <None Include="..\Source\src\Shaders\Base.FS.glsl" />
     <None Include="..\Source\src\Shaders\Base.VS.glsl" />
+    <None Include="..\Source\src\Shaders\UI.FS.glsl" />
+    <None Include="..\Source\src\Shaders\UI.VS.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FB43B467-42CC-458C-9556-597B025830F7}</ProjectGuid>

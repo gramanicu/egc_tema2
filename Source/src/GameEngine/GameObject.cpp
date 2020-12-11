@@ -54,6 +54,30 @@ GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& pos
 		rigidbody.state.x = this->position;
 		rigidbody.physics_enabled = false;
 	}
+	else if (type == "fuelbar") {
+		scale = glm::vec3(1, 1, 1);
+
+		mesh = (*meshes)["box"];
+		shader = (*shaders)["UI"];
+
+		color = glm::vec3(0.9, 0.6, 0.2);
+	}
+	else if (type == "ufuelbar") {
+		scale = glm::vec3(1, 1, 0.5);
+
+		mesh = (*meshes)["box"];
+		shader = (*shaders)["UI"];
+
+		color = glm::vec3(0.5);
+	}
+	else if (type == "life") {
+		scale = glm::vec3(0.125);
+
+		mesh = (*meshes)["box"];
+		shader = (*shaders)["UI"];
+
+		color = glm::vec3(1, 0, 0);
+	}
 }
 
 void GameEngine::GameObject::UpdatePlatformData()
@@ -132,6 +156,27 @@ void GameEngine::GameObject::Render(GameEngine::Camera *camera, const glm::vec3&
 	mesh->Render();
 }
 
+void GameEngine::GameObject::Render2D()
+{
+	glm::mat4 matrix = glm::mat4(1);
+	matrix = glm::translate(matrix, position);
+	matrix = glm::scale(matrix, scale);
+
+	if (mesh == nullptr || shader == nullptr || !_isRendered) return;
+
+	// Render the object
+	shader->Use();
+
+	// Bind MVP
+	glUniformMatrix4fv(shader->loc_view_matrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(1)));
+	glUniformMatrix4fv(shader->loc_projection_matrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(1)));
+	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(matrix));
+
+	glUniform3fv(glGetUniformLocation(shader->program, "object_color"), 1, glm::value_ptr(color));
+
+	mesh->Render();
+}
+
 std::vector<int> GameEngine::GameObject::ManageCollisions(std::vector<GameObject*> collCheck, std::unordered_map<long int, GameEngine::GameObject>* allObjects) {
 	// Only player collisions matter
 	if (type != "player") return std::vector<int>(0);
@@ -163,6 +208,26 @@ std::vector<int> GameEngine::GameObject::ManageCollisions(std::vector<GameObject
 void GameEngine::GameObject::isRendered(const bool isRendered)
 {
 	_isRendered = isRendered;
+}
+
+glm::vec3 GameEngine::GameObject::getScale() const
+{
+	return scale;
+}
+
+void GameEngine::GameObject::setScale(const glm::vec3 newScale)
+{
+	scale = newScale;
+}
+
+glm::vec3 GameEngine::GameObject::getPosition() const
+{
+	return position;
+}
+
+void GameEngine::GameObject::setPosition(const glm::vec3 newPosition)
+{ 
+	position = newPosition;
 }
 
 std::string GameEngine::GameObject::getType() const

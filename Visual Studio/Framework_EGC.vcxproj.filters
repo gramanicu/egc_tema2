@@ -173,5 +173,11 @@
     <None Include="..\Source\src\Shaders\Base.FS.glsl">
       <Filter>src\Shaders</Filter>
     </None>
+    <None Include="..\Source\src\Shaders\UI.FS.glsl">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\Source\src\Shaders\UI.VS.glsl">
+      <Filter>src\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

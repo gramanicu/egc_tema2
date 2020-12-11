@@ -165,7 +165,8 @@ void GameManager::UpdateGameState(const float deltaTime)
 	ComputeScore();
 
 	// Check fuel state
-	gameState.playerState.fuel -= deltaTime * Constants::fuelFlow;
+	float speedFuelFactor = mapBetweenRanges(gameState.playerState.playerSpeed, Constants::minSpeed, Constants::maxSpeed, 0.5, 1.5, 1);
+	gameState.playerState.fuel -= deltaTime * Constants::fuelFlow * speedFuelFactor;
 	if (gameState.playerState.fuel <= 0) {
 		// If all the fuel was used, a life is lost. If the game can go on
 		// (at least 1 life remaining), reset the fuel to max
@@ -189,6 +190,34 @@ void GameManager::UpdateGameState(const float deltaTime)
 	}
 }
 
+void Skyroads::GameManager::RenderUI()
+{
+	// Render the fuel bar
+	GameEngine::GameObject fuelbar("fuelbar", glm::vec3(-0.9, 0, 0));
+	GameEngine::GameObject ufuelbar("ufuelbar", glm::vec3(-0.9, 0, -1));
+
+	ufuelbar.setScale(Constants::fuelbarScale + Constants::fuelbarsDiff);
+
+	float percent = gameState.playerState.fuel / Constants::maxFuel;
+	fuelbar.setScale(glm::vec3(Constants::fuelbarScale.x, Constants::fuelbarScale.y * percent, Constants::fuelbarScale.z));
+
+	fuelbar.Render2D();
+	ufuelbar.Render2D();
+
+	// Render the number of lifes
+	int lifesToRender = gameState.playerState.lives;
+	glm::vec3 pos = glm::vec3(0.9, -0.9, 0);
+	
+	while (lifesToRender > 0) {
+		GameEngine::GameObject life("life", pos);
+
+		life.Render2D();
+
+		lifesToRender--;
+		pos.y += 0.130;
+	}
+}
+
 void GameManager::Update(float deltaTimeSeconds)
 {
 	std::vector<GameEngine::GameObject*> gameObjectsVector;
@@ -197,6 +226,7 @@ void GameManager::Update(float deltaTimeSeconds)
 	}
 
 	UpdateGameState(deltaTimeSeconds);
+	RenderUI();
 
 	// Update Light
 	glm::vec3 lightPosition = gameObjects[0].getRigidBody().state.x + Constants::lightPositionOffset;
@@ -246,6 +276,9 @@ void Skyroads::GameManager::CheckCollisions(std::vector<int> collided)
 		else if (color_string == "green") {
 			// Gain fuel
 			gameState.playerState.fuel += Constants::fuelGain;
+			if (gameState.playerState.fuel > Constants::maxFuel) {
+				gameState.playerState.fuel = Constants::maxFuel;
+			}
 		}
 		else if (color_string == "white") {
 			if (gameState.playerState.lives < Constants::maxLives) {

@@ -90,6 +90,11 @@ namespace GameEngine {
 		void Render(GameEngine::Camera* camera, const glm::vec3& lightLocation);
 
 		/// <summary>
+		/// Renders the GameObject on the scene.
+		/// </summary>
+		void Render2D();
+
+		/// <summary>
 		/// Manage the collisions between this object and all the other game objects
 		/// </summary>
 		/// <param name="coll_check">All the objects to be checked (this object is automatically ignored)</param>
@@ -102,6 +107,30 @@ namespace GameEngine {
 		/// </summary>
 		/// <param name="isRendered"></param>
 		void isRendered(const bool isRendered);
+
+		/// <summary>
+		/// Get the scale of the game object
+		/// </summary>
+		/// <returns>The scale</returns>
+		glm::vec3 getScale() const;
+
+		/// <summary>
+		/// Set the scale of the game object
+		/// </summary>
+		/// <param name="newScale">The new scale</param>
+		void setScale(const glm::vec3 newScale);
+
+		/// <summary>
+		/// Get the position of the game object
+		/// </summary>
+		/// <returns>The position</returns>
+		glm::vec3 getPosition() const;
+
+		/// <summary>
+		/// Set the position of the game object
+		/// </summary>
+		/// <param name="newPosition">The new position</param>
+		void setPosition(const glm::vec3 newPosition);
 
 		/// <summary>
 		/// Get the type of the game object

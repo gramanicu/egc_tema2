@@ -16,7 +16,7 @@
 namespace Skyroads {
 	namespace Constants {
 		const std::vector<std::string> platformTypes{ "platform_red", "platform_green", "platform_yellow", "platform_orange", "platform_purple", "platform_blue", "platform_white" };
-		const std::vector<std::string> shaderNames{ "Base" };
+		const std::vector<std::string> shaderNames{ "Base", "UI" };
 		const std::vector<std::string> meshNames{ "box", "sphere" };
 
 		const glm::vec3 lightPositionOffset = glm::vec3(0., 2.75f, 0.);
@@ -32,12 +32,13 @@ namespace Skyroads {
 		const float forcedSpeedTime = 5;	// In seconds
 		const float maxLives = 3;
 		
-
 		// Fuel constants
 		const float maxFuel = 100.f;
 		const float fuelGain = 0.33f * maxFuel;
 		const float fuelLoss = 0.10f * maxFuel;
-		const float fuelFlow = 5.f;		// The "fuelFlow" factor
+		const float fuelFlow = 5.f;										// The "fuelFlow" factor
+		const glm::vec3 fuelbarScale = glm::vec3(0.07, 1.9f, 1);		// The maximum scale/size of the fuelbar
+		const float fuelbarsDiff = 0.01;
 
 		// Camera constants
 		const float minFov = 60.f;
@@ -112,6 +113,11 @@ namespace Skyroads {
 		/// Update all the data related to the game logic
 		/// </summary>
 		void UpdateGameState(const float deltaTime);
+
+		/// <summary>
+		/// Render the UI
+		/// </summary>
+		void RenderUI();
 
 		/// <summary>
 		/// Check collisions and update the game state
