@@ -214,7 +214,7 @@ void Skyroads::GameManager::RenderUI()
 		life.Render2D();
 
 		lifesToRender--;
-		pos.y += 0.130;
+		pos.y += 0.15;
 	}
 }
 
@@ -265,6 +265,7 @@ void Skyroads::GameManager::CheckCollisions(std::vector<int> collided)
 		else if (color_string == "yellow") {
 			// Lose fuel
 			gameState.playerState.fuel -= Constants::fuelLoss;
+			gameObjects[0].setDistorted(Constants::powerAnimationTime);
 		}
 		else if (color_string == "orange") {
 			// Speed up
@@ -272,18 +273,21 @@ void Skyroads::GameManager::CheckCollisions(std::vector<int> collided)
 			gameState.playerState.forcedSpeedStart = Engine::GetElapsedTime();
 			gameState.playerState.oldPlayerSpeed = gameState.playerState.playerSpeed;
 			gameState.playerState.playerSpeed = Constants::maxSpeed;
+			gameObjects[0].setDistorted(Constants::forcedSpeedTime);
 		}
 		else if (color_string == "green") {
 			// Gain fuel
 			gameState.playerState.fuel += Constants::fuelGain;
 			if (gameState.playerState.fuel > Constants::maxFuel) {
 				gameState.playerState.fuel = Constants::maxFuel;
+				gameObjects[0].setDistorted(Constants::powerAnimationTime);
 			}
 		}
 		else if (color_string == "white") {
 			if (gameState.playerState.lives < Constants::maxLives) {
 				// Gain life
 				gameState.playerState.lives += 1;
+				gameObjects[0].setDistorted(Constants::powerAnimationTime);
 			}
 		}
 

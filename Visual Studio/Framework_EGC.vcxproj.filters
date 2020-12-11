@@ -179,5 +179,11 @@
     <None Include="..\Source\src\Shaders\UI.VS.glsl">
       <Filter>src\Shaders</Filter>
     </None>
+    <None Include="..\Source\src\Shaders\Distorted.VS.glsl">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\Source\src\Shaders\Distorted.FS.glsl">
+      <Filter>src\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

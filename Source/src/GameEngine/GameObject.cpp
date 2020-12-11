@@ -6,9 +6,9 @@ long int GameEngine::GameObject::currentMaxID = 0;
 std::unordered_map<std::string, Mesh*>* GameEngine::GameObject::meshes = nullptr;
 std::unordered_map<std::string, Shader*>* GameEngine::GameObject::shaders = nullptr;
 
-GameEngine::GameObject::GameObject() : id(-1), type(""), isInJump(false) , _isRendered(true), position(glm::vec3(0)), mesh(nullptr), shader(nullptr), collider(nullptr) {};
+GameEngine::GameObject::GameObject() : id(-1), type(""), isInJump(false), distortedTime(0) , _isRendered(true), position(glm::vec3(0)), mesh(nullptr), shader(nullptr), collider(nullptr) {};
 
-GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& position) : type(type), position(position), mesh(nullptr), shader(nullptr), collider(nullptr) {
+GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& position) : type(type), position(position), distortedTime(0), mesh(nullptr), shader(nullptr), collider(nullptr) {
 	id = currentMaxID++;
 	_isRendered = true;
 	isInJump = false;
@@ -16,10 +16,10 @@ GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& pos
 	if (type == "player") {
 		scale = glm::vec3(ObjectConstants::playerHeight);
 		mesh = (*meshes)["sphere"];
-		shader = (*shaders)["Base"];
+		shader = (*shaders)["Distorted"];
 		lightingInfo = { 5.f, 0.5f, .25f };
 
-		color = glm::vec3(1);
+		color = glm::vec3(1, 0, 0);
 		collider = new Collider(id, position, ObjectConstants::playerHeight / 2);
 
 		rigidbody.state.x = position;
@@ -76,7 +76,7 @@ GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& pos
 		mesh = (*meshes)["box"];
 		shader = (*shaders)["UI"];
 
-		color = glm::vec3(1, 0, 0);
+		color = glm::vec3(0.7, 0.1, 0.2);
 	}
 }
 
@@ -151,7 +151,9 @@ void GameEngine::GameObject::Render(GameEngine::Camera *camera, const glm::vec3&
 	glUniform1f(glGetUniformLocation(shader->program, "material_shininess"), (GLfloat)lightingInfo.materialShine);
 	glUniform1f(glGetUniformLocation(shader->program, "material_kd"), (GLfloat)lightingInfo.materialKd);
 	glUniform1f(glGetUniformLocation(shader->program, "material_ks"), (GLfloat)lightingInfo.materialKs);
+	glUniform1f(glGetUniformLocation(shader->program, "time"), (GLfloat)Engine::GetElapsedTime());
 	glUniform3fv(glGetUniformLocation(shader->program, "object_color"), 1, glm::value_ptr(color));
+	glUniform1i(glGetUniformLocation(shader->program, "is_distorted"), (distortedTime > 0));
 
 	mesh->Render();
 }
@@ -225,6 +227,11 @@ glm::vec3 GameEngine::GameObject::getPosition() const
 	return position;
 }
 
+void GameEngine::GameObject::setDistorted(const double time)
+{
+	distortedTime = time;
+}
+
 void GameEngine::GameObject::setPosition(const glm::vec3 newPosition)
 { 
 	position = newPosition;
@@ -262,6 +269,8 @@ std::vector<int> GameEngine::GameObject::CollisionCheck(std::vector<GameObject*>
 
 void GameEngine::GameObject::UpdatePhysics(const double deltaTime)
 {
+	if (distortedTime > 0) distortedTime -= deltaTime;
+
 	PhysixEngine::UpdatePhysics(rigidbody, deltaTime);
 
 	// Update the position from the physics engine

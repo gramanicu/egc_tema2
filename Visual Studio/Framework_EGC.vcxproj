@@ -70,6 +70,8 @@
   <ItemGroup>
     <None Include="..\Source\src\Shaders\Base.FS.glsl" />
     <None Include="..\Source\src\Shaders\Base.VS.glsl" />
+    <None Include="..\Source\src\Shaders\Distorted.FS.glsl" />
+    <None Include="..\Source\src\Shaders\Distorted.VS.glsl" />
     <None Include="..\Source\src\Shaders\UI.FS.glsl" />
     <None Include="..\Source\src\Shaders\UI.VS.glsl" />
   </ItemGroup>

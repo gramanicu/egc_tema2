@@ -47,6 +47,11 @@ namespace GameEngine {
 		Data::lightingData lightingInfo;
 
 		/// <summary>
+		/// How much the object must be in a distorted state (specifically, the player)
+		/// </summary>
+		double distortedTime;
+
+		/// <summary>
 		/// In case this object is a platform, it is possible that it's type will change (color). So, the color data and others things must be updated
 		/// </summary>
 		void UpdatePlatformData();
@@ -125,6 +130,12 @@ namespace GameEngine {
 		/// </summary>
 		/// <returns>The position</returns>
 		glm::vec3 getPosition() const;
+
+		/// <summary>
+		/// Set the time this object must be in a distorted state (will use the distorted shader)
+		/// </summary>
+		/// <param name="time">The time</param>
+		void setDistorted(const double time);
 
 		/// <summary>
 		/// Set the position of the game object

@@ -16,7 +16,7 @@
 namespace Skyroads {
 	namespace Constants {
 		const std::vector<std::string> platformTypes{ "platform_red", "platform_green", "platform_yellow", "platform_orange", "platform_purple", "platform_blue", "platform_white" };
-		const std::vector<std::string> shaderNames{ "Base", "UI" };
+		const std::vector<std::string> shaderNames{ "Base", "UI", "Distorted" };
 		const std::vector<std::string> meshNames{ "box", "sphere" };
 
 		const glm::vec3 lightPositionOffset = glm::vec3(0., 2.75f, 0.);
@@ -30,6 +30,7 @@ namespace Skyroads {
 		const float speedStep = 0.0125f;
 		const float lateralSpeed = 2.5f;	// Not continously applied
 		const float forcedSpeedTime = 5;	// In seconds
+		const double powerAnimationTime = 2;	// In seconds
 		const float maxLives = 3;
 		
 		// Fuel constants
