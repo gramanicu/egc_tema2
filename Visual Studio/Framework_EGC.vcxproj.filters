@@ -91,6 +91,9 @@
     <ClCompile Include="..\Source\src\GameEngine\Camera.cpp">
       <Filter>src\GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\src\GameEngine\Transform.cpp">
+      <Filter>src\GameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Core\World.h">
@@ -163,6 +166,9 @@
       <Filter>src\GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\src\GameEngine\Camera.hpp">
+      <Filter>src\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\src\GameEngine\Transform.hpp">
       <Filter>src\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>

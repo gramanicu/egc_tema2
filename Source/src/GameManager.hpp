@@ -20,24 +20,32 @@ namespace Skyroads {
 		const std::vector<std::string> meshNames{ "box", "sphere" };
 
 		const glm::vec3 lightPositionOffset = glm::vec3(0., 2.75f, 0.);
-		const glm::vec3 playerStartingPosition = glm::vec3(0, 5.f, 25.f);
+		const glm::vec3 playerStartingPosition = glm::vec3(0, 2.f, 25.f);
 
-		const std::vector<float> lanesX{ -2.5f, 0.f, 2.5f };
+		const std::vector<float> lanesX{ -3.5f, 0.f, 3.5f };
 
 		// Player constants
 		const float maxSpeed = 0.1f;
 		const float minSpeed = 0.0125f;
 		const float speedStep = 0.0125f;
 		const float lateralSpeed = 2.5f;	// Not continously applied
-		const float forcedSpeedTime = 5;	// In seconds
+
+		// Game Constants
+		const float forcedSpeedTime = 5;		// In seconds
 		const double powerAnimationTime = 2;	// In seconds
 		const float maxLives = 3;
+		const int maxPlatforms = 15;
+		const int minPlatformGap = 5;
+		const int maxPlatformGap = GameEngine::ObjectConstants::platformLength;
+		const int simplePlatPercent = 60;
+		const float noSpawnRange = 10.f;
+		const float outOfBoundY = -3.5f;
 		
 		// Fuel constants
 		const float maxFuel = 100.f;
 		const float fuelGain = 0.33f * maxFuel;
 		const float fuelLoss = 0.10f * maxFuel;
-		const float fuelFlow = 5.f;										// The "fuelFlow" factor
+		const float fuelFlow = 2.5f;									// The "fuelFlow" factor
 		const glm::vec3 fuelbarScale = glm::vec3(0.07, 1.9f, 1);		// The maximum scale/size of the fuelbar
 		const float fuelbarsDiff = 0.01;
 
@@ -66,6 +74,8 @@ namespace Skyroads {
 		PlayerState playerState;
 
 		float points = 0.f;
+		std::vector<float> nextPlatformSpawn = {Constants::playerStartingPosition.z, Constants::playerStartingPosition.z + 1, Constants::playerStartingPosition.z };
+		int platformCount = 0;
 	};
 
 	class GameManager : public SimpleScene

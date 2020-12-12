@@ -63,16 +63,6 @@ void GameManager::Init()
 		player.isInJump = true;
 		addGameObject(player);
 	}
-
-	// Add the first platform under the player
-	{
-		GameObject platform1("platform_green", glm::vec3(Constants::lanesX[0], -0.125, 0));
-		addGameObject(platform1);
-		GameObject platform2("platform_white", glm::vec3(Constants::lanesX[1], -0.125, 0));
-		addGameObject(platform2);
-		GameObject platform3("platform_yellow", glm::vec3(Constants::lanesX[2], -0.125, 0));
-		addGameObject(platform3);
-	}
 }
 
 void GameManager::addGameObject(GameEngine::GameObject object)
@@ -151,6 +141,11 @@ void GameManager::UpdatePlayer()
 		// Move player right
 		gameObjects[0].getRigidBody().state.v.x = Constants::lateralSpeed;
 	}
+
+	// Check if the player has fallen
+	if (gameObjects[0].getPosition().y < Constants::outOfBoundY) {
+		GameOver();
+	}
 }
 
 void GameManager::UpdateGameState(const float deltaTime)
@@ -163,6 +158,9 @@ void GameManager::UpdateGameState(const float deltaTime)
 
 	// Compute the current score
 	ComputeScore();
+	
+	// Update the platforms
+	PlatformManagement();
 
 	// Check fuel state
 	float speedFuelFactor = mapBetweenRanges(gameState.playerState.playerSpeed, Constants::minSpeed, Constants::maxSpeed, 0.5, 1.5, 1);
@@ -220,13 +218,13 @@ void Skyroads::GameManager::RenderUI()
 
 void GameManager::Update(float deltaTimeSeconds)
 {
+	UpdateGameState(deltaTimeSeconds);
+	RenderUI();
+
 	std::vector<GameEngine::GameObject*> gameObjectsVector;
 	for (auto& object : gameObjects) {
 		gameObjectsVector.push_back(&(object.second));
 	}
-
-	UpdateGameState(deltaTimeSeconds);
-	RenderUI();
 
 	// Update Light
 	glm::vec3 lightPosition = gameObjects[0].getRigidBody().state.x + Constants::lightPositionOffset;
@@ -278,9 +276,9 @@ void Skyroads::GameManager::CheckCollisions(std::vector<int> collided)
 		else if (color_string == "green") {
 			// Gain fuel
 			gameState.playerState.fuel += Constants::fuelGain;
+			gameObjects[0].setDistorted(Constants::powerAnimationTime);
 			if (gameState.playerState.fuel > Constants::maxFuel) {
 				gameState.playerState.fuel = Constants::maxFuel;
-				gameObjects[0].setDistorted(Constants::powerAnimationTime);
 			}
 		}
 		else if (color_string == "white") {
@@ -312,14 +310,81 @@ void Skyroads::GameManager::GameOver()
 void GameManager::PlatformManagement()
 {
 	// This function manages all the platforms, their spawning and removal
-	// TODO - a constant for the number of platforms in the scene
-	// TODO - platform length
 	// The platforms will be randomly spawned, many will be without effects.
-	// - red - very few
-	// - yellow - some
-	// - green - few
-	// - orange - few
-	// - white - very few
+
+	if (gameState.platformCount < Constants::maxPlatforms) {
+		// Check the lane that hasn't spawn a platform in the longest time
+		std::vector<float> nps = gameState.nextPlatformSpawn;
+		int minLaneID = std::max_element(nps.begin(), nps.end()) - nps.begin(); // Max because the z is in descending order
+
+		int platType = rand() % 100;
+		int platGap = rand() % (Constants::maxPlatformGap - Constants::minPlatformGap) + Constants::minPlatformGap;
+
+		if (platType < Constants::simplePlatPercent) {
+			// Simple platform
+			GameEngine::GameObject platform("platform_blue", glm::vec3(Constants::lanesX[minLaneID], -0.125, nps[minLaneID]));
+			addGameObject(platform);
+		}
+		else {
+			// Effect platform
+			platType = mapBetweenRanges(platType, Constants::simplePlatPercent, 100, 0, 9, 1);
+
+			if (platType < 1) {
+				// Red platform - very few
+				GameEngine::GameObject platform("platform_red", glm::vec3(Constants::lanesX[minLaneID], -0.125, nps[minLaneID]));
+				addGameObject(platform);
+			}
+			else if (platType < 4) {
+				// Yellow platform - some
+				GameEngine::GameObject platform("platform_yellow", glm::vec3(Constants::lanesX[minLaneID], -0.125, nps[minLaneID]));
+				addGameObject(platform);
+			}
+			else if (platType < 6) {
+				// Green platform - few
+				GameEngine::GameObject platform("platform_green", glm::vec3(Constants::lanesX[minLaneID], -0.125, nps[minLaneID]));
+				addGameObject(platform);
+			}
+			else if (platType < 8) {
+				// Orange platform - few
+				GameEngine::GameObject platform("platform_orange", glm::vec3(Constants::lanesX[minLaneID], -0.125, nps[minLaneID]));
+				addGameObject(platform);
+			}
+			else if (platType < 9) {
+				// White platform - very few
+				GameEngine::GameObject platform("platform_white", glm::vec3(Constants::lanesX[minLaneID], -0.125, nps[minLaneID]));
+				addGameObject(platform);
+			}
+		}
+
+		gameState.platformCount++;
+
+		// Update the next platform spawn for that lane
+		gameState.nextPlatformSpawn[minLaneID] -= GameEngine::ObjectConstants::platformLength + platGap;
+	}
+
+	// Check what platforms are out of sight (need to be removed)
+	std::vector<int> toRemove;
+	for (auto& object : gameObjects) {
+		if (object.second.getType().rfind("platform_", 0) == 0) {
+			if (object.second.getPosition().z > gameObjects[0].getPosition().z + GameEngine::ObjectConstants::platformLength / 2 + Constants::noSpawnRange) {
+				toRemove.push_back(object.first);
+			}
+		}
+	}
+	
+	// Remove the platforms
+	for (auto& id : toRemove) {
+		gameObjects.erase(id);
+		gameState.platformCount--;
+	}
+
+	// Update the nextPlatformSpawn in case it got too low
+	for (int i = 0; i < gameState.nextPlatformSpawn.size(); ++i) {
+		// A next platform z is too low if the distance between it's center and the player's center (on the Z axis) is greater than the despawn range 
+		if (gameState.nextPlatformSpawn[i] > gameObjects[0].getPosition().z - Constants::noSpawnRange) {
+			gameState.nextPlatformSpawn[i] = gameObjects[0].getPosition().z - 2 * Constants::noSpawnRange;
+		}
+	}
 }
 
 void GameManager::OnInputUpdate(float deltaTime, int mods)

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Core/Engine.h>
-#include <Component/Transform/Transform.h>
 #include "Physics.hpp"
 #include "CollisionManager.hpp"
 #include "Camera.hpp"
+#include "Transform.hpp"
 
 namespace GameEngine {
 	namespace Data {
@@ -25,6 +25,11 @@ namespace GameEngine {
 		/// The height (scale) of the player (ball)
 		/// </summary>
 		const float playerHeight = 1.f;
+
+		/// <summary>
+		/// The Z size of the platform
+		/// </summary>
+		const float platformLength = 33.3f;
 	}
 
 	class GameObject

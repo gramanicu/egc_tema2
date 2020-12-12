@@ -138,7 +138,7 @@ void main()
 
 	if(is_distorted) {
 		float b = pnoise( 0.05 * v_position + vec3( 2.0 * adjustedTime ), vec3( 100.0 ) );
-		float displacement = - noise / 2.5 + b / 12.f;
+		float displacement = noise / 2.5 + b / 12.f;
 
 		// move the position along the normal and transform it
 		vec3 newPosition = v_position + v_normal * displacement;

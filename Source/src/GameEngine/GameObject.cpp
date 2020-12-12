@@ -26,7 +26,7 @@ GameEngine::GameObject::GameObject(const std::string& type, const glm::vec3& pos
 		rigidbody.state.gravity_coef = .15f;
 	}
 	else if (type.rfind("platform_", 0) == 0) {
-		scale = glm::vec3(1, 0.25f, 250.f);
+		scale = glm::vec3(1, 0.25f, ObjectConstants::platformLength);
 		mesh = (*meshes)["box"];
 		shader = (*shaders)["Base"];
 		lightingInfo = { 0.1f, 0.99f, .001f };
@@ -127,8 +127,8 @@ GameEngine::GameObject::GameObject(const GameObject& other)
 void GameEngine::GameObject::Render(GameEngine::Camera *camera, const glm::vec3& lightLocation)
 {
 	glm::mat4 matrix = glm::mat4(1);
-	matrix = glm::translate(matrix, position);
-	matrix = glm::scale(matrix, scale);
+	matrix = Translate(matrix, position);
+	matrix = Scale(matrix, scale);
 
 	UpdatePlatformData();
 
